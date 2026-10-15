@@ -1,0 +1,187 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Heading from "../components/Heading.astro";
+import ProductCard from "../components/ProductCard.astro";
+import Button from "../components/Button.astro";
+
+const SUPABASE_URL = "https://lbkrfecnofyqzkuhuins.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_y5b_SwFaDlD8jvcpEA-GiQ_nP-3VCkg";
+
+const response = await fetch(`${SUPABASE_URL}/rest/v1/CryingWine?select=*`, {
+  method: "GET",
+  headers: {
+    apikey: SUPABASE_KEY,
+    Authorization: `Bearer ${SUPABASE_KEY}`,
+    "Content-Type": "application/json",
+  },
+});
+
+const CryingWine = (await response.json()) ?? [];
+
+const matchesFoodCategory = (product, category) =>
+  [
+    product.Food_text1,
+    product.Food_text2,
+    product.Food_text3,
+    product.Food_text4,
+  ].some(
+    (value) =>
+      String(value ?? "")
+        .trim()
+        .toLowerCase() === category.trim().toLowerCase(),
+  );
+
+console.log(CryingWine);
+---
+
+<MainLayout title="Flasken til maden">
+  <main
+    class="mx-[var(--margin-mobile)] md:mx-[var(--margin-web)] my-40 flex flex-col gap-[var(--gapmobile-xl)] md:gap-[var(--gapweb-xl)]"
+  >
+    <div class="flex flex-col md:gap-[var(--gapweb-s)]">
+      <Heading htmlheading="h1" size="large">Flasken til maden</Heading>
+
+      <div
+        class="flex gap-[var(--gapmobile-s)] lg:gap-[var(--gapweb-s)] carousel"
+      >
+        <Button href="#pasta" variant="secondary" form="pill">Pasta</Button>
+        <Button href="#meat" variant="secondary" form="pill">Kød</Button>
+        <Button href="#pizza" variant="secondary" form="pill">Pizza</Button>
+        <Button href="#fish" variant="secondary" form="pill"
+          >Fisk og skaldyr</Button
+        >
+        <Button href="#tapas" variant="secondary" form="pill">Tapas</Button>
+      </div>
+    </div>
+
+    <section
+      id="pasta"
+      class="relative scroll-mt-40 self-center w-full max-w-screen-xl"
+    >
+      <div>
+        <Heading htmlheading="h2" size="medium">Pasta</Heading>
+        <img
+          src="/img/illustrations/food/Pasta.webp"
+          alt="Pasta illustration"
+          class="absolute -top-10 -right-10 lg:-top-35 md:-right-30 w-70 md:w-90 lg:w-120 -z-10 scale-[-1]"
+        />
+      </div>
+      <div
+        class="grid grid-cols-[repeat(auto-fit,minmax(160px,175px))] lg:grid-cols-[repeat(auto-fit,minmax(250px,290px))] gap-[var(--gapmobile-m)] mt-[var(--gapmobile-l)] md:mt-[var(--gapweb-l)] justify-center md:justify-start"
+      >
+        {
+          CryingWine.filter((cryingwine) =>
+            matchesFoodCategory(cryingwine, "Pasta"),
+          ).map((cryingwine) => (
+            <ProductCard product={cryingwine} quantity={1} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section
+      id="meat"
+      class="relative scroll-mt-40 self-center w-full max-w-screen-xl"
+    >
+      <div>
+        <Heading htmlheading="h2" size="medium">Kød</Heading>
+        <img
+          src="/img/illustrations/food/Meat.webp"
+          alt="Kød illustration"
+          class="absolute -top-20 -right-15 lg:-top-35 md:-right-35 w-70 md:w-90 lg:w-120 -z-10 -rotate-17"
+        />
+      </div>
+
+      <div
+        class="grid grid-cols-[repeat(auto-fit,minmax(160px,175px))] lg:grid-cols-[repeat(auto-fit,minmax(250px,290px))] gap-[var(--gapmobile-m)] mt-[var(--gapmobile-l)] md:mt-[var(--gapweb-l)] justify-center md:justify-start"
+      >
+        {
+          CryingWine.filter((cryingwine) =>
+            matchesFoodCategory(cryingwine, "Kød"),
+          ).map((cryingwine) => (
+            <ProductCard product={cryingwine} quantity={1} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section
+      id="pizza"
+      class="relative scroll-mt-40 self-center w-full max-w-screen-xl"
+    >
+      <div>
+        <Heading htmlheading="h2" size="medium">Pizza</Heading>
+        <img
+          src="/img/illustrations/food/Pizza.webp"
+          alt="Pizza illustration"
+          class="absolute -top-10 -right-17 lg:-top-25 md:-right-30 w-70 md:w-90 lg:w-120 -z-10 rotate-12"
+        />
+      </div>
+
+      <div
+        class="grid grid-cols-[repeat(auto-fit,minmax(160px,175px))] lg:grid-cols-[repeat(auto-fit,minmax(250px,290px))] gap-[var(--gapmobile-m)] mt-[var(--gapmobile-l)] md:mt-[var(--gapweb-l)] justify-center md:justify-start"
+      >
+        {
+          CryingWine.filter((cryingwine) =>
+            matchesFoodCategory(cryingwine, "Pizza"),
+          ).map((cryingwine) => (
+            <ProductCard product={cryingwine} quantity={1} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section
+      id="fish"
+      class="relative scroll-mt-40 self-center w-full max-w-screen-xl"
+    >
+      <div>
+        <Heading htmlheading="h2" size="medium">Fisk og skaldyr</Heading>
+        <img
+          src="/img/illustrations/food/Fish.webp"
+          alt="Fisk og skaldyr illustration"
+          class="absolute -top-15 -right-25 lg:-top-30 md:-right-30 w-70 md:w-90 lg:w-120 -z-10 rotate-20"
+        />
+      </div>
+
+      <div
+        class="grid grid-cols-[repeat(auto-fit,minmax(160px,175px))] lg:grid-cols-[repeat(auto-fit,minmax(250px,290px))] gap-[var(--gapmobile-m)] mt-[var(--gapmobile-l)] md:mt-[var(--gapweb-l)] justify-center md:justify-start"
+      >
+        {
+          CryingWine.filter((cryingwine) =>
+            matchesFoodCategory(cryingwine, "Fisk og Skaldyr"),
+          ).map((cryingwine) => (
+            <ProductCard product={cryingwine} quantity={1} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section
+      id="tapas"
+      class="relative scroll-mt-40 self-center w-full max-w-screen-xl"
+    >
+      <div>
+        <Heading htmlheading="h2" size="medium">Tapas</Heading>
+        <img
+          src="/img/illustrations/food/Tapas.webp"
+          alt="Tapas illustration"
+          class="absolute -top-5 -right-20 lg:-top-15 md:-right-40 w-70 md:w-90 lg:w-120 -z-10 rotate-20"
+        />
+      </div>
+
+      <div
+        class="grid grid-cols-[repeat(auto-fit,minmax(160px,175px))] lg:grid-cols-[repeat(auto-fit,minmax(250px,290px))] gap-[var(--gapmobile-m)] mt-[var(--gapmobile-l)] md:mt-[var(--gapweb-l)] justify-center md:justify-start"
+      >
+        {
+          CryingWine.filter((cryingwine) =>
+            matchesFoodCategory(cryingwine, "Tapas"),
+          ).map((cryingwine) => (
+            <ProductCard product={cryingwine} quantity={1} />
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</MainLayout>

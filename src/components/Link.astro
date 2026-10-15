@@ -1,0 +1,35 @@
+---
+// Henter parametrene fra Astro.props
+const {
+  href = "#",
+  target = "_self",
+  variant = "textlink",
+  size = "default",
+  stylingclasses = "",
+} = Astro.props;
+
+//Definer den styling (Tailwind classes), der gør sig gældende for de forskellige varianter
+const variantClasses = {
+  textlink: " text-primary-content hover:text-accent hover:scale-[1.01]",
+  textlinkBlack:
+    " text-secondary-content bg-transparent hover:text-accent hover:bg-transparent hover:scale-[1.01] ",
+  primary:
+    "inline-block font-bold px-8 py-4 bg-primary text-primary-content shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.005] hover:shadow-lg hover:ring-1 hover:ring-primary-content hover:bg-accent hover:text-priary-content hover:border-accent",
+  secondary:
+    "inline-block font-bold border-2 px-8 py-4 border-primary text-primary bg-neutral shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.005] hover:shadow-lg  hover:text-accent hover:border-accent" /* border-secondary-500 */,
+};
+
+//Definer den styling (Tailwind classes), der gør sig gældende for de forskelligeog størrelser.
+const sizeClasses = {
+  default: "text-[12px] md:text-[13px] lg:text-[14px] uppercase",
+  large: "text-[23px] md:text-[27px] lg:text-[32px] uppercase",
+};
+---
+
+<!--Sæt classes for den pågældende knap sammen ved hjælp af Astros class:list -->
+<a
+  href={href}
+  target={target}
+  class:list={[variantClasses[variant], sizeClasses[size], stylingclasses]}
+  style={`font-family: var(--font-TextBold);`}><slot /></a
+>

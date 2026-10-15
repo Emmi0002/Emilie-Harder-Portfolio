@@ -1,0 +1,89 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Heading from "../components/Heading.astro";
+import Text from "../components/Text.astro";
+import ContactInfo from "../components/ContactInfo.astro";
+---
+
+<MainLayout title="Bag om crying">
+  <main class="my-40 flex flex-col gap-[var(--gapmobile-xl)] md:gap-[var(--gapweb-xl)]">
+    <section>
+      <Heading htmlheading="h1" size="large" color="primary" stylingclasses="mx-[var(--margin-mobile)] lg:mx-[var(--margin-web)]">Bag om Crying</Heading>
+      <!-- tekst om crying -->
+      <article
+        class="bg-[url('/img/BlobGrid.webp')]
+    bg-cover bg-fixed
+    bg-no-repeat md:flex bg-top px-[var(--gapmobile-s)] lg:px-[var(--gapweb-s)] mt-[var(--gapmobile-s)] lg:mt-[var(--gapweb-s)] mb-[var(--gapmobile-s)] lg:mb-[var(--gapweb-s)] pt-[var(--gapmobile-s)] pb-[var(--gapmobile-xs)] lg:pt-[var(--gapweb-s)] lg:pb-[var(--gapweb-xl)]"
+      >
+        <div class="grid lg:grid-cols-2 items-start gap-[var(--gapmobile-s)] lg:gap-[var(--gapweb-s)] mx-[var(--margin-mobile)] lg:mx-[var(--margin-web)]">
+          <div>
+            <Heading htmlheading="h2" size="medium" color="negative">Hvad er Crying Wine</Heading>
+            <Text teksttype="headline" weight="bold" color="secondary"> Vin uden snobberi</Text>
+            <div class="max-w-3xl gap-[var(--gapmobile-xs)] lg:gap-[var(--gapweb-xs)] flex flex-col mt-[var(--gapmobile-s)] lg:mt-[var(--gapweb-s)]">
+              <Text teksttype="body" weight="regular" color="negative">Crying Wine blev stiftet i april 2025 af Pia Silfen-Jensen og Rasmus Silfen-Jensen, som også står bag det danske taskeunivers Núnoo.</Text>
+              <Text teksttype="body" weight="regular" color="negative"
+                >Brandet blev skabt ud fra et ønske om at gøre vin mindre kompliceret og mere tilgængeligt. Hos Crying Wine handler det ikke om at kunne de rigtige ord eller kende alle reglerne – det handler om at finde en vin, der passer til
+                øjeblikket.</Text
+              >
+              <Text teksttype="body" weight="regular" color="negative"
+                >Derfor arbejder vi med et kurateret udvalg af vine, udvalgt efter stemning, setting og oplevelse. Om det er til middag med venner, en date eller en spontan tirsdag, skal det føles nemt at vælge godt.</Text
+              >
+              <Text teksttype="body" weight="regular" color="negative"
+                >Det, der adskiller Crying Wine, er vores tilgang til vin. Hvor vinbranchen ofte kan føles traditionel og utilgængelig, ønsker vi at skabe en mere moderne, visuel og intuitiv oplevelse, hvor alle kan være med.</Text
+              >
+              <Text teksttype="body" weight="regular" color="negative">Crying Wine holder til i Søborg, sammen med Núnoo, hvor vores team står for alt fra kuratering og præsentation til pakning og daglig drift.</Text>
+              <Text teksttype="body" weight="regular" color="negative">Vi er et lille team med en stor kærlighed til gode oplevelser, æstetik og vin, der giver mening i hverdagen.</Text>
+            </div>
+          </div>
+
+          <div class="flex items-end justify-end">
+            <img src="/img/illustrations/ShelfWine.webp" alt="vin tegning" class="transform lg:scale-110 lg:translate-y-50 w-10/12 lg:w-full max-w-none block self-end" />
+          </div>
+        </div>
+      </article>
+    </section>
+    <!-- om pia og Rasmus -->
+    <section>
+      <Heading htmlheading="h2" size="medium" color="primary" stylingclasses="mt-[var(--gapmobile-s)] lg:mt-[var(--gapweb-s)] mx-[var(--margin-mobile)] lg:mx-[var(--margin-web)]">Hvem er Crying Wine</Heading>
+      <div class="lg:grid grid-cols-3 gap-[var(--gapmobile-s)] lg:gap-[var(--gapweb-l)] mt-[var(--gapmobile-s)] lg:mt-[var(--gapweb-m)] mx-[var(--margin-mobile)] lg:mx-[var(--margin-web)]">
+        <div>
+          <Heading htmlheading="h3" size="small" stylingclasses="text-accent">Hvilken vin er Pia</Heading>
+          <Text teksttype="body" weight="regular" color="body"
+            >Jeg vil beskrive mig selv om en god let hvidvin. Det er fedt at det ikke er for dyrt, alt vin snobberi forstår jeg mig ikke på. Jeg vil hellere bruge pengene på noget andet. Vin skal være let, lækkert, pænt og til en god pris. jeg elsker
+            en god pris.
+          </Text>
+
+          <img src="/img/piavin.png" alt="vinflaske" class="justify-self-end pr-10 max-w-[300px] lg:max-w-[360px] intersect:animate-fade-right intersect:animate-duration-[1000ms] intersect:animate-delay-[400ms]" />
+        </div>
+        <div>
+          <img src="/img/piaograsmus.webp" alt="billede af Pia og Rasmus, som ejer Crying Wine" class="w-full h-auto" />
+        </div>
+        <div>
+          <img src="/img/rasmusvin.png" alt="vinflaske" class="justify-self-start pl-10 pb-10 max-w-[380px] lg:max-w-[450px] intersect:animate-fade-left intersect:animate-duration-[1000ms] intersect:animate-delay-[600ms]" />
+          <Heading htmlheading="h3" size="small" stylingclasses="text-accent">Hvilken vin er Rasmus</Heading>
+          <Text teksttype="body" weight="regular" color="body"
+            >Jeg ville vælge at beskrive mig selv som en hvid burgogne. Det er en klassisk vin, som smager rigtig godt. Det er en meget elegant vin, super god kvalitet, den er bare velsmagende. Jeg kan godt lide at etiketten ikke er moderne, men
+            meget old fashioned. når det kommer til vin vil jeg gerne betale pengene for det.
+          </Text>
+        </div>
+      </div>
+    </section>
+    <!-- kontaktoplysninger -->
+    <section class="mx-[var(--margin-mobile)] lg:mx-[var(--margin-web)]">
+      <div class="w-full xl:grid xl:grid-cols-2 items-stretch gap-6">
+        <div class="w-full">
+          <Heading htmlheading="h2" size="medium">Kontaktinformationer</Heading>
+
+          <div class="md:grid lg:grid-cols-3 gap-[var(--gapmobile-xs)] md:gap-[var(--gapweb-xs)]">
+            <ContactInfo label="Telefon" tekst="+45 12345678" link="tel:+4512345678" />
+            <ContactInfo label="Email" tekst="Hi@crying.wine" link="mailto:Hi@crying.wine" />
+            <ContactInfo label="Instagram" tekst="Cryingwinecopenhagen" link="https://www.instagram.com/cryingwinecopenhagen" />
+          </div>
+        </div>
+        <div class="relative hidden w-full overflow-hidden pt-[50%] xl:block">
+          <img src="/img/ContactImg.webp" alt="billede stemning" class="absolute inset-0 h-full w-full object-cover object-center" />
+        </div>
+      </div>
+    </section>
+  </main>
+</MainLayout>

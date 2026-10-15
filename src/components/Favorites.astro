@@ -1,0 +1,20 @@
+---
+import Heading from "./Heading.astro";
+---
+
+<section class="grid gap-[var(--gapmobile-m)] md:mx-[var(--margin-web)]">
+  <Heading stylingclasses="mx-[var(--margin-mobile)] md:mx-0" htmlheading="h2" size="medium">Favoritter</Heading>
+  <div class="grid grid-cols-2 gap-[var(--gapmobile-xs)] md:grid-cols-4 md:gap-[var(--gapmobile-l)] lg:gap-[var(--gapweb-xl)]">
+    <a href="/product/18" class="block hover:scale-[1.01]"> <img src="/img/favorites/Fav1.webp" alt="Favorit 1 - Arndorfer Landwein" /></a>
+
+    <a href="/product/4" class="block hover:scale-[1.01]">
+      <img src="/img/favorites/Fav2.webp" alt="Favorit 1 - La Soif" />
+    </a>
+    <a href="/product/10" class="block hover:scale-[1.01]">
+      <img src="/img/favorites/Fav3.webp" alt="Favorit 1 - Fleur Rebelle" />
+    </a>
+    <a href="/product/21" class="block hover:scale-[1.01]">
+      <img src="/img/favorites/Fav4.webp" alt="Favorit 1 - Moonboy" />
+    </a>
+  </div>
+</section>

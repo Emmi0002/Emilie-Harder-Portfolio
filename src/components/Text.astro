@@ -1,0 +1,49 @@
+---
+import { caption } from "motion/react-m";
+
+// Henter parametrene fra Astro.props
+
+const {
+  teksttype = "body",
+  stylingclasses = "",
+  weight = "regular",
+  color = "body",
+} = Astro.props;
+
+//Definer den styling (Tailwind classes), der gør sig gældende for de forskellige størrelser.
+const sizeClasses = {
+  headline: "text-[13px] md:text-[16px] lg:text-[20px] ",
+  body: "text-[12px] md:text-[13px] lg:text-[16px]",
+  subtitle: "text-[11px] md:text-[11px] lg:text-[13px]",
+  caption: "text-[40px] md:text-[45px] lg:text-[70px] font-Caption ;",
+  footnote: "text-[12px] md:text-[12px] lg:text-[14px] uppercase",
+  label: "text-[12px] md:text-[13px] lg:text-[14px] uppercase",
+};
+
+// Tailwind font classes
+const typeClasses = {
+  light: "font-TextLight",
+  regular: "font-Text",
+  bold: "font-TextBold",
+  caption: "font-Caption",
+};
+
+const colorClasses = {
+  primary: "text-primary",
+  secondary: "text-secondary",
+  body: "text-base-content",
+  accent: "text-accent",
+  negative: "text-primary-content",
+};
+---
+
+<p
+  class:list={[
+    sizeClasses[teksttype],
+    typeClasses[weight],
+    colorClasses[color],
+    stylingclasses,
+  ]}
+>
+  <slot />
+</p>

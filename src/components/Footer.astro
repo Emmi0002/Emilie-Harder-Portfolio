@@ -1,0 +1,68 @@
+---
+import Text from "./Text.astro";
+import Link from "./Link.astro";
+---
+
+<footer class="relative rounded-none bg-[var(--color-surfacedarker)] text-[var(--color-surfacedarker-content)] flex flex-col gap-[var(--gapweb-m)]">
+  <div class="relative grid grid-cols-3 lg:grid-cols-6 w-full">
+    <img src="/img/instagram/IgPost1.webp" alt="Billede af flaske med teksten 'Glædeståre på flaske'" class="w-full lg:h-80 h-40 object-cover" />
+
+    <img src="/img/instagram/IgPost2.webp" alt="Billede af to vinder der drikker vin" class="w-full lg:h-80 h-40 object-cover" />
+
+    <img src="/img/instagram/IgPost3.webp" alt="Billede af Pinot vin med skitsering af flaske udenom" class="w-full lg:h-80 h-40 object-cover" />
+
+    <img src="/img/instagram/IgPost4.webp" alt="Grafik af vinflasken Fluer Rebelle" class="w-full lg:h-80 h-40 object-cover" />
+
+    <img src="/img/instagram/IgPost5.webp" alt="Billede af vin og vinglas på jorden" class="w-full lg:h-80 h-40 object-cover" />
+
+    <img src="/img/instagram/IgPost6.webp" alt="Billede af håndholdt vinflaske med skitsering" class="w-full lg:h-80 h-40 object-cover" />
+
+    <!-- OVERLAY Instagram -->
+
+    <a href="https://instagram.com/cryingwinecopenhagen" target="_blank" class="absolute inset-0 flex items-center justify-center z-10 lg:justify-end lg:items-end lg:mr-40">
+      <Text teksttype="headline" weight="bold" stylingclasses="text-center" color="secondary"> @CRYINGWINECOPENHAGEN </Text>
+    </a>
+  </div>
+
+  <div class="flex w-full gap-[var(--gapweb-xs)] lg:justify-end pl-10 lg:pr-[var(--gapweb-xl)]">
+    <img src="/img/illustrations/ArrowYellow.webp" alt="Gul pil" class="h-10 md:h-15 pointer-events-auto" />
+    <Text teksttype="caption" weight="caption" color="secondary">Følg med her</Text>
+  </div>
+
+  <div
+    class="flex lg:flex-row flex-col gap-[var(--gapmobile-2xl)] lg:gap-0 justify-between lg:pl-[var(--gapweb-xl)] pl-[var(--gapmobile-l)] lg:pr-100 lg:-mt-10 relative z-10 mb-[var(--gapmobile-l)] lg:mb-[var(--gapweb-l)]"
+  >
+    <div class="flex flex-col lg:gap-[var(--gapweb-xxs)]">
+      <Text teksttype="footnote" weight="bold" color="negative" stylingclasses="mb-2 lg:mb-1">Vin med posten</Text>
+      <div class="flex flex-col gap-0">
+        <div class="join">
+          <label class="input validator join-item pr-6 py-5">
+            <input type="email" placeholder="Din e-mail" class="w-full pl-0 text-grey text-s m-0" required />
+          </label>
+          <button class="btn btn-neutral join-item px-6 py-5">Tilmeld</button>
+        </div>
+        <div class="validator-hint hidden">Skriv en gyldig email adresse</div>
+        <div class="h-px w-3/4 bg-[var(--color-surfacedarker-content)] opacity-50 mt-6"></div>
+        <img src="/img/illustrations/Letter-wine.webp" alt="Letter wine" class="w-50 lg:w-55 h-auto -mt-70 lg:-mt-40 lg:-translate-y-16 lg:translate-x-45 -rotate-30 z-10 relative self-end" />
+      </div>
+      <img src="/img/icon/blob/WhiteBlob.webp" alt="hvid ikon" class="hidden lg:block w-auto h-30 lg:-mt-12 lg:-ml-10 self-start pointer-events-none" />
+    </div>
+
+    <div class="grid grid-cols-2 lg:gap-[var(--gapweb-xl)] gap-[var(--gapmobile-xl)] mt-[var(--gapmobile-m)] lg:mt-[var(--gapweb-m)] mb-[var(--gapmobile-m)] lg:mb-[var(--gapweb-l)]">
+      <nav class="flex flex-col gap-[var(--gapweb-s)]">
+        <Link href="#" variant="textlink" size="default">BETINGELSER</Link>
+        <Link href="#" variant="textlink" size="default">PRIVATLIVSPOLITIK</Link>
+        <Link href="#" variant="textlink" size="default">F.A.Q</Link>
+        <Link href="/#" variant="textlink" size="default">RETURNERING</Link>
+      </nav>
+      <nav class="flex flex-col gap-[var(--gapweb-s)]">
+        <Link href="/bagomcrying" variant="textlink" size="default">OM OS</Link>
+        <Link href="#" variant="textlink" size="default">INSTAGRAM</Link>
+        <Link href="#" variant="textlink" size="default">KONTAKT</Link>
+        <Link href="/komponentbibliotek" variant="textlink" size="default">Komponentbibliotek</Link>
+      </nav>
+    </div>
+  </div>
+  <img src="/img/icon/blob/WhiteBlob.webp" alt="hvid ikon" class="lg:hidden w-30 h-30 ml-4 mt-4 pointer-events-none" />
+  <img src="/img/icon/payment.png" alt="kortmetoder" class="absolute bottom-4 right-4 w-60 h-auto pointer-events-none mt-20" />
+</footer>

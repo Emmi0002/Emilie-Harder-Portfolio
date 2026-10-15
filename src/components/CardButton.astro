@@ -1,0 +1,27 @@
+---
+// Henter parametrene fra Astro.props
+const { variant = "secondary", size = "", dispatchCart = false } = Astro.props;
+
+//Definer den styling (Tailwind classes), der gør sig gældende for de forskellige varianter
+const variantClasses = {
+  primary:
+    "py-1 btn btn-primary btn-sm md:btn-md lg:btn-lg xl:btn-xl transition-colors duration-300 hover:bg-accent hover:text-primary-content text-[11px] md:text-[12px] lg:text-[14px] uppercase",
+  secondary:
+    "py-1 btn btn-secondary btn-outline btn-sm md:btn-md lg:btn-lg xl:btn-xl hover:text-base-content hover:bg-base-100 text-[11px] md:text-[12px] lg:text-[14px] uppercase",
+};
+
+const sizeClasses = {
+  wide: "w-full",
+};
+---
+
+<button
+  @click="typeof show === 'function' ? show() : null"
+  onclick={dispatchCart
+    ? "window.dispatchEvent(new CustomEvent('cartAdded',{detail:{quantity:1}}))"
+    : null}
+  class:list={[variantClasses[variant], sizeClasses[size]]}
+  style={`font-family: var(--font-TextBold);`}
+>
+  <slot />
+</button>

@@ -1,0 +1,155 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Heading from "../components/Heading.astro";
+import ProductCard from "../components/ProductCard.astro";
+import Button from "../components/Button.astro";
+import Text from "../components/Text.astro";
+
+// URL til vores Supabase projekt/database
+const SUPABASE_URL = "https://lbkrfecnofyqzkuhuins.supabase.co";
+// Public API nøgle som giver adgang til databasen
+const SUPABASE_KEY = "sb_publishable_y5b_SwFaDlD8jvcpEA-GiQ_nP-3VCkg";
+
+// fetch() sender et HTTP request til Supabase
+// await bruges fordi det tager tid at hente data fra en server
+// ${SUPABASE_URL} = indsætter database URL'en
+// /rest/v1/ = Supabase REST API endpoint, en webadresse man sender requests til for at hente eller arbejde med data fra databasen.
+const response = await fetch(`${SUPABASE_URL}/rest/v1/CryingWine?select=*`, {
+  // GET betyder at vi kun henter data
+  method: "GET",
+  headers: {
+    // API nøgle bruges til adgang til databasen
+    apikey: SUPABASE_KEY,
+    // Authorization bruges til at verificere adgang
+    Authorization: `Bearer ${SUPABASE_KEY}`,
+    // Vi fortæller at vi arbejder med JSON data
+    "Content-Type": "application/json",
+  },
+});
+
+// response.json() omdanner JSON data fra serveren til JavaScript objekter vi kan arbejde med
+// await bruges fordi omdannelsen tager tid
+// ?? [] er en fallback, altså hvis koden ikke går igennem
+// Hvis response.json() returnerer null eller undefined bliver CryingWine i stedet et tomt array []
+const CryingWine = (await response.json()) ?? [];
+
+console.log(CryingWine);
+---
+
+<MainLayout title="På hylden">
+  <main
+    class="mx-[var(--margin-mobile)] md:mx-[var(--margin-web)] my-40 flex flex-col gap-[var(--gapmobile-xl)] md:gap-[var(--gapweb-xl)]"
+  >
+    <div class="flex flex-col md:gap-[var(--gapweb-s)]">
+      <Heading htmlheading="h1" size="large">Hele vinhylden</Heading>
+      <div
+        class="flex gap-[var(--gapmobile-s)] lg:gap-[var(--gapweb-s)] carousel"
+      >
+        <Button variant="secondary" form="pill" type="button" data-filter="all"
+          >ALLE</Button
+        >
+        <Button
+          variant="secondary"
+          form="pill"
+          type="button"
+          data-filter="white">HVID</Button
+        >
+        <Button
+          variant="secondary"
+          form="pill"
+          type="button"
+          data-filter="orange">ORANGE</Button
+        >
+        <Button variant="secondary" form="pill" type="button" data-filter="rose"
+          >ROSÈ</Button
+        >
+        <Button variant="secondary" form="pill" type="button" data-filter="red"
+          >RØD</Button
+        >
+        <Button
+          variant="secondary"
+          form="pill"
+          type="button"
+          data-filter="bubbles">BOBLER</Button
+        >
+        <Button
+          variant="secondary"
+          form="pill"
+          type="button"
+          data-filter="natur">NATUR</Button
+        >
+        <Button
+          variant="secondary"
+          form="pill"
+          type="button"
+          data-filter="alkoholfri">ALKOHOLFRI</Button
+        >
+        <Button variant="secondary" form="pill" href="/smagskasser"
+          >SMAGSKASSER
+        </Button>
+        <Button variant="secondary" form="pill" href="/merch">MERCH</Button>
+      </div>
+    </div>
+    <div
+      class="grid grid-cols-[repeat(auto-fit,minmax(160px,175px))] lg:grid-cols-[repeat(auto-fit,minmax(250px,290px))] gap-[var(--gapmobile-m)] mt-[var(--gapmobile-l)] md:mt-[var(--gapweb-l)] justify-center"
+      data-wine-grid
+    >
+      {
+        CryingWine.map((cryingwine) => (
+          <div
+            data-wine-card
+            data-category={String(cryingwine.Category ?? "")
+              .trim()
+              .toUpperCase()}
+          >
+            <ProductCard product={cryingwine} quantity={1} />
+          </div>
+        ))
+      }
+    </div>
+  </main>
+
+  <script>
+    const filters = {
+      all: () => true,
+      white: (category) =>
+        ["HVID", "HVID/ALKOHOLFRI", "HVID/NATUR"].includes(category),
+      orange: (category) => category === "ORANGE",
+      rose: (category) => ["ROSE", "ROSÉ"].includes(category),
+      red: (category) => ["RØD", "RØD/NATUR"].includes(category),
+      bubbles: (category) => category === "BOBLER",
+      natur: (category) => category.includes("NATUR"),
+      alkoholfri: (category) => category.includes("ALKOHOLFRI"),
+      smagskasser: (category) => category === "SMAGSKASSER",
+      merch: (category) => category === "MERCH",
+    };
+
+    const cards = document.querySelectorAll<HTMLElement>("[data-wine-card]");
+    const buttons = document.querySelectorAll<HTMLElement>("[data-filter]");
+
+    const applyFilter = (filterName) => {
+      const matcher = filters[filterName] ?? filters.all;
+
+      cards.forEach((card) => {
+        const category = (card.dataset.category || "").trim().toUpperCase();
+        card.classList.toggle("hidden", !matcher(category));
+      });
+
+      buttons.forEach((button) => {
+        button.toggleAttribute(
+          "aria-pressed",
+          button.dataset.filter === filterName,
+        );
+      });
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () =>
+        applyFilter(button.dataset.filter || "all"),
+      );
+    });
+
+    applyFilter("all");
+    history.replaceState(null, "", window.location.pathname);
+  </script>
+</MainLayout>

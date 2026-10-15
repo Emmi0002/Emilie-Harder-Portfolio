@@ -1,0 +1,427 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Heading from "../../components/Heading.astro";
+import Text from "../../components/Text.astro";
+import CardButton from "../../components/CardButton.astro";
+import Favorites from "../../components/Favorites.astro";
+import TasteBox from "../../components/TasteBox.astro";
+
+// TypeScript type til at definere hvordan et produktobjekt skal se ud. Det gør koden mere sikker og hjælper med at undgå fejl, fordi TypeScript kan kontrollere datatyperne.
+// Hvis ikke disse informationer er der, kan den ikke finde ud af at hente de rigtige informationer.
+type Product = {
+  id: string | number;
+  Productname?: string;
+  Category?: string;
+  Description?: string;
+  Price?: string | number;
+  img1?: string;
+  img2?: string;
+  Badge1?: string;
+  Badge2?: string;
+  Badge3?: string;
+  Food_icon1?: string;
+  Food_icon2?: string;
+  Food_icon3?: string;
+  Food_icon4?: string;
+  Food_text1?: string;
+  Food_text2?: string;
+  Food_text3?: string;
+  Food_text4?: string;
+};
+
+// Astro funktion der bruges til dynamiske sider.
+// Den fortæller Astro hvilke sider der skal genereres ved build.
+export async function getStaticPaths() {
+  // URL til vores Supabase database/API
+  const SUPABASE_URL = "https://lbkrfecnofyqzkuhuins.supabase.co";
+  // Public API key til at hente data fra databasen
+  const SUPABASE_KEY = "sb_publishable_y5b_SwFaDlD8jvcpEA-GiQ_nP-3VCkg";
+
+  // fetch() sender et HTTP request til Supabase
+  // await bruges fordi det tager tid at hente data fra en server
+  // ${SUPABASE_URL} = indsætter database URL'en
+  // /rest/v1/ = Supabase REST API endpoint, en webadresse man sender requests til for at hente eller arbejde med data fra databasen.
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/CryingWine?select=*`, {
+    // GET betyder at vi kun henter data
+    method: "GET",
+    headers: {
+      // API nøgle bruges til adgang til databasen
+      apikey: SUPABASE_KEY,
+      // Authorization bruges til at verificere adgang
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      // Vi fortæller at vi arbejder med JSON data
+      "Content-Type": "application/json",
+    },
+  });
+
+  const products: Product[] = (await response.json()) ?? [];
+
+  // map() gennemgår alle produkter og laver dynamiske sider
+  return products.map((product) => ({
+    params: { id: String(product.id) },
+    // props sender produktdata videre til siden
+    props: { product },
+  }));
+}
+
+// Linjen henter product data fra Astro.props. Samtidig bruger jeg TypeScript til at fortælle at 'product' skal følge Product typen, så jeg får type-sikkerhed og færre fejl i koden.
+const { product } = Astro.props as { product: Product };
+
+const { quantity = 1 } = Astro.props;
+---
+
+<MainLayout title={product.Productname ?? "Produkt"}>
+  <main class="mt-30">
+    <!-- TILBAGEKNAP - javascript:history.back() - brugest til at gå tilbage til sidst besøgte side - således det virker til både forside, på hylden og madparringer -->
+    <a
+      href="javascript:history.back()"
+      class="flex flex-row items-center w-fit mx-[var(--margin-mobile)] md:mx-[var(--margin-web)] md:-mb-2 transition-transform duration-300 hover:scale-105"
+    >
+      <img
+        class="w-10 md:w-15 scale-x-[-1] -mr-2 pointer-events-auto"
+        src="/img/illustrations/arrowFoodparring.webp"
+        alt="Pil"
+      />
+      <Text
+        teksttype="caption"
+        weight="caption"
+        stylingclasses="text-right"
+        color="accent"
+      >
+        Tilbage
+      </Text>
+    </a>
+
+    <div
+      class="flex flex-col gap-[var(--gapmobile-xl)] md:gap-[var(--gapweb-xl)]"
+    >
+      <section
+        class="grid grid-cols-1 md:grid-cols-2 md:gap-[var(--gapweb-l)] md:mx-[var(--margin-web)] items-center"
+      >
+        <!-- Mobilversion - img karusel -->
+        <div class="block md:hidden col-span-1">
+          <div class="mb-[var(--gapmobile-s)] mx-[var(--margin-mobile)]">
+            <Heading htmlheading="h1" size="large" color="primary"
+              >{product.Productname}</Heading
+            >
+          </div>
+
+          <div
+            class="carousel w-full space-x-[var(--gapmobile-m)] ml-[var(--margin-mobile)]"
+          >
+            <div class="carousel-item">
+              <img
+                class="aspect-square w-[300px] object-cover"
+                src={product.img1}
+                alt={product.Productname}
+              />
+            </div>
+            {
+              product.img2 && (
+                <div class="carousel-item">
+                  <img
+                    class="aspect-square w-[300px] object-cover"
+                    src={product.img2}
+                    alt={product.Productname}
+                  />
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        <!-- Desktop version - hovedbillede + thumbnails -->
+        <div
+          x-data={`{ selected: '${product?.img1 ?? ""}' }`}
+          class="hidden md:grid md:col-span-1 gap-[var(--gapweb-s)] grid-cols-[auto_1fr] items-start justify-self-end"
+        >
+          <div class="flex flex-col gap-[var(--gapweb-m)]">
+            <button type="button" @click={`selected = '${product.img1 ?? ""}'`}>
+              <img
+                src={product.img1}
+                alt={product.Productname}
+                class="w-20 h-20 object-cover cursor-pointer"
+              />
+            </button>
+            {
+              product.img2 && (
+                <button type="button" @click={`selected = '${product.img2}'`}>
+                  <img
+                    src={product.img2}
+                    alt={product.Productname}
+                    class="w-20 h-20 object-cover cursor-pointer"
+                  />
+                </button>
+              )
+            }
+          </div>
+
+          <!-- Main Image -->
+          <div>
+            <img
+              :src="selected"
+              alt="Main Image"
+              class="w-full max-w-[400px] h-auto object-contain"
+            />
+          </div>
+        </div>
+
+        <!-- Produkt detaljer -->
+        <div
+          class="grid grid-cols-1 gap-[var(--gapmobile-s)] md:gap-[var(--gapweb-s)] mx-[var(--margin-mobile)] md:col-span-1"
+        >
+          <div
+            class="flex flex-col gap-[var(--gapmobile-xxs)] md:gap-[var(--gapweb-xxs)]"
+          >
+            <Heading
+              stylingclasses="hidden md:block"
+              htmlheading="h1"
+              size="large"
+              color="primary">{product.Productname}</Heading
+            >
+            <Text
+              teksttype="headline"
+              weight="light"
+              color="primary"
+              stylingclasses="uppercase">{product.Category}</Text
+            >
+
+            <div class="flex gap-2 flex-wrap">
+              {
+                product.Badge1 && (
+                  <span class="badge bg-info rounded-radius-selector text-[12px] md:text-[12px] lg:text-[14px] uppercase font-TextLight">
+                    {product.Badge1}
+                  </span>
+                )
+              }
+              {
+                product.Badge2 && (
+                  <span class="badge bg-info rounded-radius-selector text-[12px] md:text-[12px] lg:text-[14px] uppercase font-TextLight">
+                    {product.Badge2}
+                  </span>
+                )
+              }
+              {
+                product.Badge3 && (
+                  <span class="badge bg-info rounded-radius-selector text-[12px] md:text-[12px] lg:text-[14px] uppercase font-TextLight">
+                    {product.Badge3}
+                  </span>
+                )
+              }
+            </div>
+          </div>
+
+          <img
+            class="w-1/2"
+            src="/img/illustrations/SingleViewLine.webp"
+            alt="Line"
+          />
+
+          <Text stylingclasses="mr-0 lg:mr-40">{product.Description}</Text>
+
+          <Text
+            teksttype="headline"
+            weight="bold"
+            color="primary"
+            stylingclasses="uppercase">{product.Price} DKK</Text
+          >
+
+          <div
+            x-data="{ qty: 0 }"
+            class="flex items-center gap-[var(--gapmobile-s)] md:gap-[var(--gapweb-s)]"
+          >
+            <button
+              @click="if (qty > 0) qty--"
+              :class="{'opacity-50': qty <= 0}"
+              :disabled="qty <= 0"
+              type="button"
+              class="w-10 h-10 lg:w-12 lg:h-12 rounded-full shrink-0 border-2 border-[var(--color-primary)] text-[var(--color-primary)] bg-[var(--color-neutral)] flex items-center justify-center text-xl lg:text-2xl"
+            >
+              −
+            </button>
+
+            <div class="min-w-[36px] text-center text-lg" x-text="qty">0</div>
+
+            <button
+              @click="qty++"
+              type="button"
+              class="w-10 h-10 lg:w-12 lg:h-12 rounded-full shrink-0 border-2 border-[var(--color-primary)] text-[var(--color-primary)] bg-[var(--color-neutral)] flex items-center justify-center text-xl lg:text-2xl"
+            >
+              +
+            </button>
+
+            <CardButton variant="primary" dispatchCart>Put i kassen</CardButton>
+          </div>
+        </div>
+      </section>
+
+      <!-- Madparringer og billede -->
+      <section
+        class="relative bg-[var(--color-primary)] flex flex-col lg:grid lg:grid-cols-7 p-15 gap-[var(--gapmobile-m)] items-center lg:items-stretch justify-center"
+      >
+        <img
+          src="/img/illustrations/FishWineInfo.webp"
+          alt="Fisk og skaldyr illustration"
+          class="absolute top-0 left-0 w-40 lg:w-60"
+        />
+        <img
+          src="/img/illustrations/WineGlassesInfo.webp"
+          alt="Vinglas illustration"
+          class="absolute bottom-0 right-0 w-80 lg:w-100"
+        />
+
+        <div
+          class="lg:col-span-3 text-center h-full flex flex-col justify-between"
+        >
+          <div>
+            <Heading htmlheading="h3" size="small" color="secondary"
+              >DRIKKES BEDST TIL</Heading
+            >
+            <div
+              class="mt-10 grid gap-[var(--gapmobile-l)] grid-cols-2 md:gap-[var(--gapweb-l)] items-center justify-items-center"
+            >
+              {
+                product.Food_icon1 && product.Food_text1 && (
+                  <div class="flex flex-col items-center gap-[var(--gapmobile-xxs)] text-center z-10">
+                    <img
+                      src={product.Food_icon1}
+                      alt={product.Food_text1}
+                      class="w-full aspect-square max-w-50 object-cover"
+                    />
+                    <Text teksttype="headline" weight="bold" color="negative">
+                      {product.Food_text1}
+                    </Text>
+                  </div>
+                )
+              }
+              {
+                product.Food_icon2 && product.Food_text2 && (
+                  <div class="flex flex-col items-center gap-[var(--gapweb-xxs)] text-center z-10">
+                    <img
+                      src={product.Food_icon2}
+                      alt={product.Food_text2}
+                      class="w-full aspect-square max-w-50 object-cover"
+                    />
+                    <Text teksttype="headline" weight="bold" color="negative">
+                      {product.Food_text2}
+                    </Text>
+                  </div>
+                )
+              }
+              {
+                product.Food_icon3 && product.Food_text3 && (
+                  <div class="flex flex-col items-center gap-[var(--gapweb-xxs)] text-center z-10">
+                    <img
+                      src={product.Food_icon3}
+                      alt={product.Food_text3}
+                      class="w-full aspect-square max-w-50 object-cover"
+                    />
+                    <Text teksttype="headline" weight="bold" color="negative">
+                      {product.Food_text3}
+                    </Text>
+                  </div>
+                )
+              }
+              {
+                product.Food_icon4 && product.Food_text4 && (
+                  <div class="flex flex-col items-center gap-[var(--gapweb-xxs)] text-center z-10">
+                    <img
+                      src={product.Food_icon4}
+                      alt={product.Food_text4}
+                      class="w-full aspect-square max-w-50 object-cover"
+                    />
+                    <Text teksttype="headline" weight="bold" color="negative">
+                      {product.Food_text4}
+                    </Text>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Linje vertikal -->
+        <div
+          class="hidden lg:flex lg:col-span-1 items-center justify-center h-full"
+        >
+          <img
+            src="/img/illustrations/SingleViewLineWhite.webp"
+            alt="Line"
+            class="h-full object-contain"
+          />
+        </div>
+
+        <!-- Linje horizontal -->
+        <div class="lg:hidden flex items-center justify-center">
+          <img
+            src="/img/illustrations/SingleViewLineWhiteHorizontal.webp"
+            alt="Line"
+          />
+        </div>
+
+        <div class="lg:col-span-3 h-full flex items-center justify-center z-10">
+          <img
+            src={product.img_with_name}
+            alt={product.Productname}
+            class="h-full w-auto max-h-[600px] object-contain"
+          />
+        </div>
+      </section>
+
+      <div class="mx-[var(--margin-mobile)] md:mx-[var(--margin-web)]">
+        <TasteBox />
+      </div>
+      <div class="mb-[var(--gapmobile-xl)]">
+        <Favorites />
+      </div>
+    </div>
+
+    <!-- CART OVERLAY -->
+    <div
+      x-data="{ open: false }"
+      x-init="window.addEventListener('cartAdded', () => { open = true; setTimeout(() => open = false, 3000) })"
+      class="fixed top-25 right-4 z-50"
+    >
+      <div
+        x-show="open"
+        x-transition:enter="transition transform ease-out duration-500"
+        x-transition:enter-start="translate-x-full opacity-0"
+        x-transition:enter-end="translate-x-0 opacity-100"
+        x-transition:leave="transition transform ease-in duration-500"
+        x-transition:leave-start="translate-x-0 opacity-100"
+        x-transition:leave-end="translate-x-full opacity-0"
+        class="bg-base-100 flex gap-6 w-screen max-w-sm p-6 outline-3 outline-primary shadow-xl overflow-hidden"
+      >
+        <!-- Billede -->
+        <div class="shrink-0">
+          <img
+            src={product.img1}
+            alt={product.Productname}
+            class="w-20 md:w-32 h-auto"
+          />
+        </div>
+
+        <!-- Tekst -->
+        <div class="flex flex-col pr-8 w-full my-(var(--gapweb-xs))">
+          <Text teksttype="headline" weight="bold" color="primary">
+            Puttet i kassen
+          </Text>
+
+          <img
+            src="/img/illustrations/VectorLine.png"
+            alt="Seperation line"
+            class="w-[84px] lg:w-[118px] my-(--gapweb-xxs)"
+          />
+
+          <Text tekstype="headline" weight="regular" color="body">
+            {product.Productname}
+          </Text>
+          <Text tekstype="body" weight="regular" color="primary"
+            >Pris: {product.Price} DKK</Text
+          >
+          <Text teksttype="body">Antal: {quantity}</Text>
+        </div>
+      </div>
+    </div>
+  </main>
+</MainLayout>

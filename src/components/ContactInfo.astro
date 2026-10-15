@@ -1,0 +1,12 @@
+---
+import Text from "./Text.astro";
+import Link from "./Link.astro";
+const { tekst, label, link = "#" } = Astro.props;
+---
+
+<div
+  class="relative min-h-[210px] lg:min-h-[240px] p-[var(--gapmobile-s)] lg:p-[var(--gapweb-s)] flex flex-col items-center justify-center text-center gap-1 lg:gap-2 before:pointer-events-none before:absolute before:inset-0 before:bg-[url('/img/icon/blob/FullLightBlueBlob.webp')] before:bg-contain before:bg-center before:bg-no-repeat before:opacity-25 before:content-['']"
+>
+  <Text teksttype="headline" weight="bold" color="body" stylingclasses="relative z-10 uppercase"> {label} </Text>
+  <Link href={link} variant="textlinkBlack" stylingclasses="relative z-10 transition-colors duration-200 hover:text-accent font-light">{tekst}</Link>
+</div>

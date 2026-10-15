@@ -1,0 +1,112 @@
+---
+// Henter props fra Astro
+const {
+  variant = "primary",
+  size = "responsive",
+  form = "square",
+  type = "button",
+  href = "",
+  target = "_self",
+  ...rest
+} = Astro.props;
+
+// Base classes
+const buttonStyling = "btn filter-btn";
+
+// Variant styles
+const variantClasses = {
+  primary:
+    "font-bold px-8 py-4 bg-primary text-primary-content focus:bg-accent focus:text-primary focus:border-primary focus:border-2",
+
+  secondary:
+    "font-bold border-2 px-8 py-4 border-primary text-primary bg-neutral hover:border-accent hover:text-accent focus:bg-accent focus:text-primary focus:border-primary",
+};
+
+// Size styles
+const sizeClasses = {
+  responsive:
+    "btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl text-[12px] md:text-[13px] lg:text-[14px] uppercase",
+};
+
+// Shape styles
+const formClasses = {
+  square: "rounded-none",
+  pill: "rounded-full",
+};
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      target={target}
+      data-variant={variant}
+      {...rest}
+      class:list={[
+        buttonStyling,
+        variantClasses[variant],
+        sizeClasses[size],
+        formClasses[form],
+      ]}
+      style="font-family: var(--font-TextBold);"
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      type={type}
+      data-variant={variant}
+      {...rest}
+      class:list={[
+        buttonStyling,
+        variantClasses[variant],
+        sizeClasses[size],
+        formClasses[form],
+      ]}
+      style="font-family: var(--font-TextBold);"
+    >
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  /* Active button */
+  .is-active {
+    background: var(--color-surfacedarker) !important;
+    color: var(--color-primary-content) !important;
+    border-color: var(--color-surfacedarker) !important;
+  }
+
+  /* Ensure children also become white */
+  .is-active * {
+    color: var(--color-primary-content) !important;
+  }
+
+  /* Secondary hover color */
+  .filter-btn[data-variant="secondary"]:not(.is-active):hover *,
+  .filter-btn[data-variant="secondary"]:not(.is-active):focus * {
+    color: var(--color-accent) !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("click", (e) => {
+    // Element der blev klikket på
+    const target = e.target as Element;
+
+    // Finder nærmeste filter-knap
+    const clickedBtn = target.closest(".filter-btn");
+
+    // Stop hvis man ikke klikkede på en filter-knap
+    if (!clickedBtn) return;
+
+    // Fjern active state fra alle knapper
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.classList.remove("is-active");
+    });
+
+    // Gør den klikkede knap aktiv
+    clickedBtn.classList.add("is-active");
+  });
+</script>

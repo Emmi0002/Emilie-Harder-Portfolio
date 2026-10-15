@@ -1,0 +1,49 @@
+---
+import Heading from "./Heading.astro";
+import Text from "./Text.astro";
+import Link from "./Link.astro";
+---
+
+<article
+  class="flex flex-col intersect:animate-fade-left intersect:animate-duration-[1000ms] intersect:animate-delay-[200ms]"
+>
+  <img
+    src="/img/illustrations/longvectorline.png"
+    alt="blå streg"
+    class="mb-[var(--gapmobile-m)] lg:mb-[var(--gapweb-m)]"
+  />
+  <div
+    class="flex flex-col lg:grid lg:grid-cols-2 items-center gap-[var(--gapmobile-m)] lg:gap-[var(--gapweb-m)] mb-[var(--gapmobile-xs)] lg:mb-[var(--gapweb-xs)]"
+  >
+    <img
+      src="/img/smagskasse.webp"
+      alt="Smagskasse"
+      class="order-2 lg:order-1 w-full max-w-[420px] h-auto justify-self-center self-center"
+    />
+    <div class="order-1 lg:order-2 flex h-full flex-col justify-center">
+      <div
+        class="flex flex-col gap-[var(--gapmobile-s)] lg:gap-[var(--gapweb-s)]"
+      >
+        <Heading size="medium" color="primary">Smagskasser</Heading>
+        <Text teksttype="headline" color="accent" weight="bold"
+          >I tvivl om hvilken vin der passer til din middag? <br /> og hvilken ret
+          du skal servere?</Text
+        >
+        <Text teksttype="body" color="body"
+          >I vores madkasse får du 3 vin der er parret op på månedens opskrift.<br
+          /> Inviter vennerne over og del vin-glæden.<br /> Det var så lidt.
+        </Text>
+      </div>
+      <Link
+        variant="primary"
+        href="/paahylden"
+        stylingclasses="mt-6 lg:mt-10 w-fit">Alle smagskasser</Link
+      >
+    </div>
+  </div>
+  <img
+    src="/img/illustrations/longvectorline.png"
+    alt="blå streg"
+    class="mt-[var(--gapmobile-xs)] lg:mt-[var(--gapweb-xs)]"
+  />
+</article>

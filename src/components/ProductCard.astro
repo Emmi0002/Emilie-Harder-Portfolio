@@ -1,0 +1,144 @@
+---
+import CardButton from "./CardButton.astro";
+import Text from "./Text.astro";
+
+const { product, quantity = 1 } = Astro.props;
+---
+
+<!-- xdata bruges til at styre visningen af overlayet når man lægger i kurv -->
+<div
+  class="card w-full rounded-none overflow-x-hidden h-full flex flex-col"
+  x-data="{
+    hovering: false,
+    open: false,
+    show() {
+      this.open = true
+      setTimeout(() => this.open = false, 3000)
+      // Dispatch cartAdded event til header
+      window.dispatchEvent(new CustomEvent('cartAdded', { 
+        detail: { quantity: 1 } 
+      }))
+    }
+  }"
+>
+  <div class="card w-full rounded-none overflow-hidden">
+    <a href={`/product/${product.id}`} class="flex-1 flex flex-col bg-base-100">
+      <div
+        class="relative w-full h-44 sm:h-56 lg:h-72 overflow-hidden"
+        @mouseenter="hovering = true"
+        @mouseleave="hovering = false"
+      >
+        <!-- Kategory tekst -->
+        <Text
+          tekstype="headline"
+          weight="bold"
+          color="negative"
+          stylingclasses="z-10 absolute top-1 right-0 lg:top-1 lg:right-0 whitespace-nowrap [writing-mode:vertical-rl] [text-orientation:mixed]"
+          >{product.Category}</Text
+        >
+        <!-- Image 1 (top layer, fades on hover) -->
+        <figure class="absolute inset-0">
+          <img
+            src={product.img1}
+            alt={product.Productname}
+            class="w-full h-full object-cover rounded-none transition-opacity duration-300 aspect-square"
+            x-bind:class="hovering ? 'opacity-0' : 'opacity-100'"
+          />
+        </figure>
+
+        <!-- Image 2 (bottom layer, shows on hover) -->
+        <figure class="absolute inset-0">
+          <img
+            src={product.img2}
+            alt={product.Productname}
+            class="w-full h-full object-cover rounded-none transition-opacity duration-300 aspect-square"
+            x-bind:class="hovering ? 'opacity-100' : 'opacity-0'"
+          />
+        </figure>
+      </div>
+    </a>
+    <!-- Button on top of image 2 -->
+    <div
+      class="hidden lg:flex absolute inset-0 items-center justify-center px-4 transform transition-all duration-300 pointer-events-none"
+      x-bind:class="hovering ? 'opacity-100 translate-y-4/11' : 'opacity-0 translate-y-full'"
+    >
+      <CardButton variant="primary" size="wide">Put i kassen </CardButton>
+    </div>
+  </div>
+  <div class="flex-1 flex flex-col justify-between py-[var(--gapweb-xxs)]">
+    <a href={`/product/${product.id}`} class="flex-1 flex flex-col bg-base-100">
+      <div>
+        <div class="my-[var(--gapweb-xxs)]">
+          <span
+            class="badge bg-info rounded-radius-selector text-[8px] md:text-[10px] lg:text-[12px] uppercase font-TextLight"
+            >{product.Badge1}</span
+          >
+          <span
+            class="badge bg-info rounded-radius-selector text-[8px] md:text-[10px] lg:text-[12px] uppercase font-TextLight"
+            >{product.Badge2}</span
+          >
+          <span
+            class="badge bg-info rounded-radius-selector text-[8px] md:text-[10px] lg:text-[12px] uppercase font-TextLight"
+            >{product.Badge3}</span
+          >
+        </div>
+
+        <img
+          src="/img/illustrations/VectorLine.png"
+          alt="Seperation line"
+          class="w-[84px] lg:w-[118px] my-[var(--gapweb-xxs)]"
+        />
+
+        <div class="my-[var(--gapweb-xxs)]">
+          <Text tekstype="headline" weight="bold">{product.Productname}</Text>
+          <Text tekstype="body" weight="light">{product.Price} DKK</Text>
+        </div>
+      </div>
+    </a>
+
+    <div class="lg:hidden mt-4 w-full">
+      <CardButton variant="primary" size="wide">Put i kassen </CardButton>
+    </div>
+  </div>
+  <!-- CART OVERLAY -->
+  <div class="fixed top-25 right-4 z-50">
+    <div
+      x-show="open"
+      x-transition:enter="transition transform ease-out duration-500"
+      x-transition:enter-start="translate-x-full opacity-0"
+      x-transition:enter-end="translate-x-0 opacity-100"
+      x-transition:leave="transition transform ease-in duration-500"
+      x-transition:leave-start="translate-x-0 opacity-100"
+      x-transition:leave-end="translate-x-full opacity-0"
+      class="bg-base-100 flex gap-6 w-screen max-w-sm p-6 outline-3 outline-primary shadow-xl overflow-hidden"
+    >
+      <!-- Billede -->
+      <div class="shrink-0">
+        <img
+          src={product.img1}
+          alt={product.Productname}
+          class="w-20 md:w-32 h-auto"
+        />
+      </div>
+
+      <!-- Tekst -->
+      <div class="flex flex-col pr-8 w-full my-(var(--gapweb-xs))">
+        <CardButton variant="primary">Put i kassen </CardButton>
+
+        <img
+          src="/img/illustrations/VectorLine.png"
+          alt="Seperation line"
+          class="w-[84px] lg:w-[118px] my-(--gapweb-xxs)"
+        />
+
+        <Text tekstype="headline" weight="regular" color="body">
+          {product.Productname}
+        </Text>
+        <Text tekstype="body" weight="regular" color="primary"
+          >Pris: {product.Price} DKK</Text
+        >
+        <Text teksttype="body">Antal: {quantity}</Text>
+      </div>
+    </div>
+  </div>
+</div>
